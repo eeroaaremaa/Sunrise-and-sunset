@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -98,16 +99,35 @@ public class Main {
         return Math.toDegrees(Math.acos(Math.cos(Math.toRadians(90.833))/(Math.cos(Math.toRadians(LAT))*Math.cos(Math.toRadians(SDDeg)))-Math.tan(Math.toRadians(LAT))*Math.tan(Math.toRadians(SDDeg))));
     }
 
-    public static void solarNoon(double LONG, double EqofTime, double TZ){
+    public static double solarNoon(double LONG, double EqofTime, double TZ){
         System.out.println((720-4*LONG-EqofTime+TZ*60)*60);
-        double rounded = Math.round((720-4*LONG-EqofTime+TZ*60)*60 *1000)/100;
+        double rounded = Math.round((720-4*LONG-EqofTime+TZ*60)*60 *1000)/1000;
         System.out.println(rounded);
         int seconds = (int)rounded ;
         System.out.println(seconds);
         System.out.println(((seconds % 86400) / 3600) + " hours");
         System.out.println(((seconds % 3600) / 60) + " minutes");
         System.out.println(((seconds % 3600) % 60) + " seconds");
+
+        return (720-4*LONG-EqofTime+TZ*60)/1440;
     }
+
+    public static void sunriseTime(double solarNoon, double HASunriseDeg, double TZ){
+        double time = solarNoon-(HASunriseDeg*4/1440);
+        long timeInMilliSeconds = (long) Math.floor((time *24*60*60*1000 - (TZ*60*60*1000)));
+        Date date = new Date(timeInMilliSeconds);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        System.out.println(sdf.format(date));
+    }
+
+    public static void sunsetTime(double solarNoon, double HASunriseDeg, double TZ){
+        double time = solarNoon+(HASunriseDeg*4/1440);
+        long timeInMilliSeconds = (long) Math.floor((time *24*60*60*1000 - (TZ*60*60*1000)));
+        Date date = new Date(timeInMilliSeconds);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        System.out.println(sdf.format(date));
+    }
+
 
 
     public static void main(String args[]) {
@@ -167,13 +187,17 @@ public class Main {
         System.out.println(VarY);
 
         double EqOfTimeMin = EqOfTimeMin(VarY, GMLSdeg, eccentEarthOrbit, GMASdeg);
-        System.out.println(EqOfTimeMin);
+        System.out.println("EqOfTimeMin " + EqOfTimeMin);
 
         double HASunriseDeg = HASunriseDeg(latitude, sunDeclinDeg);
-        System.out.println(HASunriseDeg);
+        System.out.println("HASunriseDeg " + HASunriseDeg);
 
         //double solarNoon = solarNoon(longitude, EqOfTimeMin, timeZone);
         //System.out.println(solarNoon);
-        solarNoon(longitude, EqOfTimeMin, timeZone);
+        double solarNoon = solarNoon(longitude, EqOfTimeMin, timeZone);
+
+        sunriseTime(solarNoon,HASunriseDeg, timeZone);
+        sunsetTime(solarNoon,HASunriseDeg, timeZone);
+
     }
 }
