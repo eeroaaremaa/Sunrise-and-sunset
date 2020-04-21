@@ -2,11 +2,37 @@ import time
 import sys
 import math
 import datetime
+from timezonefinder import TimezoneFinder
+import pytz
 
 #print ('Number of arguments:', len(sys.argv), 'arguments.')
 #print ('Argument List:', sys.argv[2], "   ",  sys.argv[3])
 
-timezone = 3
+timezone = sys.argv[4]
+def toJulian(date):
+    JGREG = 15 + 31*(10+12*1582)
+
+    dateList = date.split("-")
+    year = float(dateList[0])
+    month = float(dateList[1])
+    day = float(dateList[2])
+    julianYear = year
+    if(year < 0): 
+        julianYear += 1
+    julianMonth = month
+    if (month > 2):
+        julianMonth += 1
+    else:
+        julianYear -= 1
+        julianMonth += 13
+    
+    julian = (math.floor(365.25 * julianYear) + math.floor(30.6001*julianMonth) + day + 1720995.0)
+    if (day + 31 * (month + 12 * year) >= JGREG):
+        ja = int(0.01 * julianYear)
+        julian += 2 - ja + (0.25 * ja)
+        
+    return math.floor(julian)
+    
 
 def toJulianCentury(julian):
     return (julian-2451545)/36525
@@ -75,8 +101,32 @@ def sunriseTime(solarNoon, HASunriseDeg, TZ):
         minutes_str = minutes
     return ("%d:%s" % (hours, minutes_str))
 
+def sunsetTime(solarNoon, HASunriseDeg, TZ):
+    time = solarNoon + (HASunriseDeg * 4 / 1440)
+    timeInMilliSeconds = math.floor((time *24*60*60*1000 ))
+    #+ (TZ*60*60*1000)
+    ts = datetime.datetime.fromtimestamp(abs(timeInMilliSeconds)/1000.0)
+    print("millisec", timeInMilliSeconds)
 
-def sunrise(latitude, longitude, timeZone, julian):
+
+    millis = int(timeInMilliSeconds)
+    seconds=(millis/1000)%60
+    seconds = int(seconds)
+    minutes=(millis/(1000*60))%60
+    minutes = int(minutes)
+    hours=(millis/(1000*60*60))%24
+    if(seconds >= 30):
+        minutes += 1
+    if(minutes < 10):
+        minutes_str = "0" + str(minutes)
+    else:
+        minutes_str = minutes
+    return ("%d:%s" % (hours, minutes_str))
+
+def sunriseSunset(latitude, longitude, timeZone, date):
+    print(date)
+    julian = toJulian(date)
+    print(julian)
     julianCentury = toJulianCentury(julian)
     print("julianCentury", julianCentury)
     GMLSdeg = geomMeanLongSunDeg(julianCentury)
@@ -106,7 +156,29 @@ def sunrise(latitude, longitude, timeZone, julian):
     SNoon = solarNoon(longitude, EqOTMin, timeZone)
     print("SNoon", SNoon)
 
-    return sunriseTime(SNoon, HASunDeg, timeZone)
+    return sunriseTime(SNoon, HASunDeg, timeZone) + " " + sunsetTime(SNoon, HASunDeg, timeZone)
 
 
-print(sunrise(float(sys.argv[1]), float(sys.argv[2]), timezone, float(sys.argv[3])))
+def dms_to_deg (deg, min, sec):
+	return float(deg) + (float(min)/60) + (float(sec)/3600)
+
+latDeg = dms_to_deg(sys.argv[6], sys.argv[7], sys.argv[8])
+lngDeg = dms_to_deg(sys.argv[9], sys.argv[10], sys.argv[11])
+print(sunriseSunset(latDeg, lngDeg, float(sys.argv[4]), sys.argv[5]))
+
+tzFinder = TimezoneFinder()
+tz_string = tzFinder.certain_timezone_at(lng = float(sys.argv[2]), lat = float(sys.argv[1]))
+#print(tz_string)
+
+lng = float(sys.argv[2])
+lat = float(sys.argv[1])
+
+#timezone = pytz.timezone(tz_string)
+#print(timezone, " timezone")
+#if(timezone is not None):
+#    dt = datetime.datetime.now()
+#    utc_offset = timezone.utcoffset(dt)
+#else:
+#    print("TEST")
+
+
