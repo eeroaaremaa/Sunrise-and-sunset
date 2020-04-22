@@ -21,6 +21,8 @@ Peale seda tagasilööki otsustasin kirjutada veebirakenduse PHP, JavaScripti, H
 
 Kõige suurem väljakutse oli minu jaoks Google Maps-i ja kasutaja poolt sisestatud koordinaatide sünkroniseerimise. Selle lahendasin küpsistega. Lisaks sellele oli Google Maps-i integreerimine kohati tülikas aga täna laialdasele dokumentatsioonile sain sellega üpris kiirelt hakkama. Päiksetõusu ja loojangu arvutamiseks olid valemid internetist kiiresti leitavad, seega see osutus oodatust kergemaks ülesandeks.
 
+Selle projekti käigus esitasin üpris vähe commite GitHubi, tavaliselt commitin projekti käigus tihedamini.
+
 Kui projekti edasi arendada siis tasuks lisada ka pikema ajaperioodi vaatamise võimalus ja graafikud päiksetõusu ja aegade kohta.
 
 Üldiselt jäin enda projektiga rahule ning arvan, et valmis igati viisakas veebirakendus.
