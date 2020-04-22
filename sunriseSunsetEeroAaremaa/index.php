@@ -85,17 +85,21 @@
 		<!-- Loome lihtsa bootstrap navigatsioonirea ekraanin algusesse-->
 		<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
   			<span class="navbar-brand">Sunset and sunrise calculator</span>
+			  <div class="navbar-nav ml-auto">
+                <span class="nav-item nav-link">Made by Eero Ääremaa</span>
+            </div>
 		</nav>
 		<!-- Loome peamise jaotuse -->
 		<div class  = container id = "main">
 			<div class = "row justify-content-md-center">
-				<div class="col" id= "left" >
+				<div class="col-lg-6 col-md-6" id= "left" >
 					<!-- Loome kaardi, mille hiljem JavaScripti abil kuvame -->
 					<div id="map"></div>
 				</div>
 
 				<!-- Parempoolne jaotus sisaldab kasutajale andmete sisestamiseks vajaliku -->
-				<div class="col" id = "right">
+				<div class="col-lg-6 col-md-6 col-sm-4" id = "right">
+					<br>
 					<!-- Kasutama HTML-i elementi form, mis nuppu "Submit" vajutamisel saadab php-le sisestatud info -->
 					<form method = "post" >
 						
@@ -166,25 +170,6 @@
 			</div>
 		</div>
 		
-		<!-- Lisame veebilehe lõppu navigatsioonirea, kus kuvame infot autori kohta-->
-		<nav class="navbar fixed-bottom navbar-light" style="background-color: #e3f2fd; width: 100%;">
-			<div class="container-fluid">
-				<div class="row justify-content-md-center" >
-					<div class="col-8">
-						One of three columns
-					</div>
-					<div class="col-4">
-						One of three columns
-					</div>
-				</div>
-				<div class="row justify-content-md-center" >
-					<div class="col">
-						Eero Ääremaa 2020
-					</div>
-				</div>
-			</div>
-		</nav>
-
 		<!-- Käivitame Google Maps API jaoks vajaliku skripti --> 
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBy8U0o5mS9mRHZKHpp4u6kHizUAYB-tYk&callback=initMap"
 		async defer></script>
